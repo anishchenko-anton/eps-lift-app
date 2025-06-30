@@ -14,7 +14,13 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@core/*": ["libs/core-logic/*"],
+      "@home/*": ["libs/home-feature/*"],
+      
+      "@eps-lift-app/core-logic": ["libs/core-logic/src/index.ts"],
+      "@eps-lift-app/home-component": ["libs/components/home/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

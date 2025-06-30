@@ -1,0 +1,24 @@
+<ActionBar title="Lift Control (NS)"></ActionBar>
+
+<StackLayout class="p-4">
+    <Label>
+        <FormattedString>
+            <Span text="Статус: "></Span>
+            <Span [text]="(facade.isConnected$ | async) ? 'Подключено' : 'Отключено'" 
+                  [class.text-green-500]="facade.isConnected$ | async"
+                  [class.text-red-500]="!(facade.isConnected$ | async)"></Span>
+        </FormattedString>
+    </Label>
+    
+    <ActivityIndicator [busy]="facade.isConnecting$ | async"></ActivityIndicator>
+    <Label *ngIf="facade.connectionError$ | async as error" [text]="error" class="text-red-500"></Label>
+
+    <Button text="Подключиться" (tap)="connect()" [isEnabled]="!(facade.isConnected$ | async)"></Button>
+    <Button text="Отключиться" (tap)="facade.disconnect()" [isEnabled]="facade.isConnected$ | async"></Button>
+
+    <GridLayout columns="*, *" rows="auto" class="mt-4" *ngIf="facade.isConnected$ | async">
+        <Button text="Вверх" (tap)="onTap('up')" col="0"></Button>
+        <Button text="Вниз" (tap)="onTap('down')" col="1"></Button>
+    </GridLayout>
+    <Button text="Стоп" (tap)="onTap('stop')" class="mt-2" *ngIf="facade.isConnected$ | async"></Button>
+</StackLayout>

@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
-import { HomeComponent } from './features/home/home.component';
-import { DetailComponent } from './features/detail/detail.component';
+import { HomeComponent } from '@eps-lift-app/home-feature';
 
-export const routes: Routes = [
-  { path: '', redirectTo: '/home', pathMatch: 'full' },
-  { path: 'home', component: HomeComponent },
-  { path: 'item/:id', component: DetailComponent },
+export const appRoutes: Routes = [
+  {
+    path: '',
+    component: HomeComponent,
+  },
 ];

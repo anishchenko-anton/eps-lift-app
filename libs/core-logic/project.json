@@ -1,0 +1,13 @@
+{
+  "name": "core-logic",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/core-logic/src",
+  "prefix": "lib",
+  "projectType": "library",
+  "tags": ["type:logic", "scope:shared"],
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

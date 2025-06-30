@@ -1,0 +1,28 @@
+<main class="container">
+  <h1>Lift Control (Web)</h1>
+
+  <p>Статус:
+    <ng-container *ngIf="facade.isConnected$ | async; else disconnected">
+      <span class="status-connected">Подключено</span>
+    </ng-container>
+    <ng-template #disconnected><span class="status-disconnected">Отключено</span></ng-template>
+  </p>
+
+  <div *ngIf="facade.isConnecting$ | async">
+    <p>Подключение...</p>
+  </div>
+  <div *ngIf="facade.connectionError$ | async as error" class="error">
+    {{ error }}
+  </div>
+
+  <div class="controls">
+    <button (click)="connect()" [disabled]="(facade.isConnected$ | async) || (facade.isConnecting$ | async)">Подключиться</button>
+    <button (click)="facade.disconnect()" [disabled]="!(facade.isConnected$ | async)">Отключиться</button>
+  </div>
+
+  <div class="lift-controls" *ngIf="facade.isConnected$ | async">
+    <p>Нажмите и удерживайте кнопки для движения:</p>
+    <button (mousedown)="onPress('up')" (mouseup)="onRelease()" (mouseleave)="onRelease()">Вверх</button>
+    <button (mousedown)="onPress('down')" (mouseup)="onRelease()" (mouseleave)="onRelease()">Вниз</button>
+  </div>
+</main>
