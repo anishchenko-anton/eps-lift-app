@@ -1,35 +1,23 @@
-import {
-  bootstrapApplication,
-  provideNativeScriptHttpClient,
-  provideNativeScriptNgZone,
-  provideNativeScriptRouter,
-  runNativeScriptAngularApp,
-} from '@nativescript/angular';
-import { provideZonelessChangeDetection } from '@angular/core';
-import { withInterceptorsFromDi } from '@angular/common/http';
-import { routes } from './app.routes';
+// mobile-nativescript/src/main.ts
+import { bootstrapApplication } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
+import { appRoutes } from './app.routes';
+import { provideRouter } from '@angular/router';
 
+// --- ИМПОРТЫ ДЛЯ НАШЕЙ АРХИТЕКТУРЫ ---
 import { CommunicationAdapter } from '@eps-lift-app/core-logic';
 import { NativescriptBluetoothAdapter } from './adapters/nativescript-bluetooth.adapter';
 
-/**
- * Disable zone by setting this to true
- * Then also adjust polyfills.ts (see note there)
- */
-const EXPERIMENTAL_ZONELESS = false;
+// --- ПРАВИЛЬНЫЙ ИМПОРТ ДЛЯ HTTP-КЛИЕНТА ---
+import { provideHttpClient } from '@angular/common/http';
 
-runNativeScriptAngularApp({
-  appModuleBootstrap: () => {
-    return bootstrapApplication(AppComponent, {
-      providers: [
-        provideNativeScriptHttpClient(withInterceptorsFromDi()),
-        provideNativeScriptRouter(routes),
-        EXPERIMENTAL_ZONELESS
-          ? provideZonelessChangeDetection()
-          : provideNativeScriptNgZone(),
-        { provide: CommunicationAdapter, useClass: NativescriptBluetoothAdapter }
-      ],
-    });
-  },
+
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideRouter(appRoutes),
+    provideHttpClient(), // <-- ИСПОЛЬЗУЕМ СТАНДАРТНЫЙ ПРОВАЙДЕР
+
+    // --- НАШ ПРОВАЙДЕР ДЛЯ АДАПТЕРА ОСТАЕТСЯ БЕЗ ИЗМЕНЕНИЙ ---
+    { provide: CommunicationAdapter, useClass: NativescriptBluetoothAdapter }
+  ],
 });

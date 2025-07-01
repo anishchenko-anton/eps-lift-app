@@ -1,7 +1,7 @@
 {
-  "name": "nativescript-mobile",
+  "name": "mobile-nativescript",
   "$schema": "../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "nativescript-mobile/src",
+  "sourceRoot": "mobile-nativescript/src",
   "projectType": "application",
   "targets": {
     "build": {
@@ -24,6 +24,12 @@
         }
       },
       "dependsOn": ["^build"]
+    },
+    "run-android": {
+      "executor": "@nativescript/nx:run",
+      "options": {
+        "platform": "android"
+      }
     },
     "debug": {
       "executor": "@nativescript/nx:debug",
@@ -78,7 +84,7 @@
     "lint": {
       "executor": "@nx/eslint:lint",
       "options": {
-        "lintFilePatterns": ["nativescript-mobile/**/*.{ts,spec.ts}"]
+        "lintFilePatterns": ["mobile-nativescript/**/*.{ts,spec.ts}"]
       }
     }
   }

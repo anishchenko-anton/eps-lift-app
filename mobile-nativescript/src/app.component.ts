@@ -4,7 +4,7 @@ import { PageRouterOutlet } from '@nativescript/angular';
 @Component({
   selector: 'ns-app',
   templateUrl: './app.component.html',
-  imports: [PageRouterOutlet],
-  schemas: [NO_ERRORS_SCHEMA],
+  // imports: [],
+  // schemas: [],
 })
 export class AppComponent {}

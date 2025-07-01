@@ -1,9 +1,9 @@
 // mobile-nativescript/src/app/adapters/nativescript-bluetooth.adapter.ts
 import { Injectable, NgZone } from '@angular/core';
 import { CommunicationAdapter } from '@eps-lift-app/core-logic';
-import { BehaviorSubject, Observable, from, throwError, timer } from 'rxjs';
+import { BehaviorSubject, Observable, from, throwError, timer, of } from 'rxjs';
 import { catchError, filter, switchMap, take, tap } from 'rxjs/operators';
-import { Bluetooth, Peripheral } from '@nativescript-community/bluetooth';
+import { Bluetooth, Peripheral } from '@nativescript-community/ble';
 
 // !!! ВАЖНО: Замените эти значения на реальные UUID вашего устройства !!!
 const LIFT_SERVICE_UUID = '0000ffe0-0000-1000-8000-00805f9b34fb'; // Пример: UART Service
@@ -24,7 +24,7 @@ export class NativescriptBluetoothAdapter implements CommunicationAdapter {
 
     return from(
       this.bluetooth.startScanning({
-        serviceUUIDs: [LIFT_SERVICE_UUID],
+        filters: [{ serviceUUID: LIFT_SERVICE_UUID }],
         seconds: 5, // Сканируем 5 секунд
         onDiscovered: (peripheral) => {
           console.log(`[NS] Found peripheral: ${peripheral.name} (${peripheral.UUID})`);

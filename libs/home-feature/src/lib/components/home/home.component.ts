@@ -2,6 +2,7 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LiftControlFacade } from '@eps-lift-app/core-logic';
+import { TouchGestureEventData } from '@nativescript/core';
 
 @Component({
   selector: 'eps-lift-app-home',
@@ -43,6 +44,26 @@ export class HomeComponent {
         this.facade.moveDown();
         break;
       case 'stop':
+        this.facade.stop();
+        break;
+    }
+  }
+
+  public handleTouch(event: TouchGestureEventData, direction: 'up' | 'down') {
+    switch (event.action) {
+      // Палец коснулся экрана
+      case 'down':
+        console.log(`Начало движения: ${direction}`);
+        if (direction === 'up') {
+          this.facade.moveUp();
+        } else {
+          this.facade.moveDown();
+        }
+        break;
+
+      // Палец оторвался от экрана
+      case 'up':
+        console.log('Остановка движения');
         this.facade.stop();
         break;
     }

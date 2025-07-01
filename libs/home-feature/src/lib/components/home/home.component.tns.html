@@ -16,9 +16,9 @@
     <Button text="Подключиться" (tap)="connect()" [isEnabled]="!(facade.isConnected$ | async)"></Button>
     <Button text="Отключиться" (tap)="facade.disconnect()" [isEnabled]="facade.isConnected$ | async"></Button>
 
-    <GridLayout columns="*, *" rows="auto" class="mt-4" *ngIf="facade.isConnected$ | async">
-        <Button text="Вверх" (tap)="onTap('up')" col="0"></Button>
-        <Button text="Вниз" (tap)="onTap('down')" col="1"></Button>
-    </GridLayout>
-    <Button text="Стоп" (tap)="onTap('stop')" class="mt-2" *ngIf="facade.isConnected$ | async"></Button>
+   <GridLayout columns="*, *" rows="auto" class="mt-4" *ngIf="facade.isConnected$ | async">
+    <Button text="Вверх" (touch)="handleTouch($event, 'up')" col="0"></Button>
+    <Button text="Вниз" (touch)="handleTouch($event, 'down')" col="1"></Button>
+</GridLayout>
+    <!-- <Button text="Стоп" (tap)="onTap('stop')" class="mt-2" *ngIf="facade.isConnected$ | async"></Button> -->
 </StackLayout>
