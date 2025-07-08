@@ -53,20 +53,46 @@ class LiftControlFacade {
     statusMessage.value = "Подключение к ${device.platformName}...";
     try {
       final success = await _liftDeviceService.connect(device);
-      if (success) {
-        statusMessage.value = "Подключено. Обнаружение сервисов...";
-        print("FACADE: Connection successful. Discovering services...");
-        final services = await _liftDeviceService.discoverServices();
-        print("FACADE: Discovered ${services.length} services.");
-        if (services.isNotEmpty) {
-            discoveredServices.value = services;
-            statusMessage.value = "Сервисы обнаружены. Выберите характеристику.";
-        } else {
-            statusMessage.value = "Подключено, но сервисы не найдены.";
-        }
-      } else {
+      if (!success) {
         statusMessage.value = "Не удалось подключиться.";
+        return;
       }
+
+      statusMessage.value = "Подключено. Обнаружение сервисов...";
+      final services = await _liftDeviceService.discoverServices();
+      discoveredServices.value = services; // Сразу обновляем список для UI
+
+      if (services.isEmpty) {
+        statusMessage.value = "Подключено, но сервисы не найдены.";
+        return;
+      }
+
+      // Ищем все характеристики, которые поддерживают запись.
+      final List<BluetoothCharacteristic> writableCharacteristics = [];
+      for (var service in services) {
+        for (var characteristic in service.characteristics) {
+          if (characteristic.properties.write || characteristic.properties.writeWithoutResponse) {
+            writableCharacteristics.add(characteristic);
+          }
+        }
+      }
+
+      // Анализируем результат.
+      if (writableCharacteristics.length == 1) {
+        // Если нашлась только одна — выбираем ее автоматически.
+        selectedCharacteristic.value = writableCharacteristics.first;
+        statusMessage.value = "Готов к работе (характеристика выбрана автоматически)";
+        print("FACADE: Auto-selected the only writable characteristic.");
+      } else if (writableCharacteristics.length > 1) {
+        // Если нашлось несколько — просим пользователя выбрать.
+        statusMessage.value = "Найдено несколько характеристик. Выберите нужную.";
+         print("FACADE: Found multiple writable characteristics. Waiting for user selection.");
+      } else {
+        // Если не нашлось ни одной.
+        statusMessage.value = "Подключено, но нет характеристик для управления.";
+        print("FACADE: No writable characteristics found.");
+      }
+
     } catch (e) {
       statusMessage.value = "Ошибка подключения: ${e.toString()}";
     }
